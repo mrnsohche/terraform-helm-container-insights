@@ -47,7 +47,7 @@ resource "helm_release" "container_insights" {
   depends_on = [aws_iam_role.eks_container_insights_role]
 
   name      = "container-insights"
-  chart     = "${module.path}/charts/container-insights"
+  chart     = "${path.module}/charts/container-insights"
   namespace = "amazon-cloudwatch"
 
   set {
@@ -86,12 +86,12 @@ resource "helm_release" "container_insights" {
   }
 
   set {
-    name  = cloudwatch_agent_image
+    name  = "cloudwatch_agent_image"
     value = var.cloudwatch_agent_image
   }
 
   set {
-    name  = fluentbit_image
+    name  = "fluentbit_image"
     value = var.fluentbit_image
   }
 }
