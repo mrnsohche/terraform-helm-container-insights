@@ -1,0 +1,13 @@
+# create configmap for cluster name and aws region for CloudWatch Logs
+apiVersion: v1
+data:
+  cluster.name: {{ .Values.cluster_name }}
+  logs.region: {{ .Values.region_name }}
+  http.server: {{ .Values.http_server_toggle }}
+  http.port: {{ .Values.http_server_port }}
+  read.head: {{ .Values.read_from_head }}
+  read.tail: {{ .Values.read_from_tail }}
+kind: ConfigMap
+metadata:
+  name: fluent-bit-cluster-info
+  namespace: amazon-cloudwatch

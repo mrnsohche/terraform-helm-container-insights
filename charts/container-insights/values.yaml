@@ -1,0 +1,17 @@
+region_name: "ap-southeast-2"
+
+cluster_name: ""
+
+http_server_toggle: "On"
+
+http_server_port: "2020"
+
+read_from_head: "Off"
+
+read_from_tail: "On"
+
+container_insights_iam_role_arn: ""
+
+cloudwatch_agent_image: "amazon/cloudwatch-agent:1.247348.0b251302"
+
+fluentbit_image: "amazon/aws-for-fluent-bit:2.10.0"
