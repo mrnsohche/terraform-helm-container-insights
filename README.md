@@ -47,7 +47,7 @@ module "container-insights" {
 
 Here is an example of using this module:
 
-- [`examples/complete`](https://github.com/gooygeek/terraform-insights/tree/master/examples/complete/)
+- [`examples/complete`](https://github.com/gooygeek/terraform-helm-container-insights/tree/master/examples/complete/)
 
 ## Requirements
 
