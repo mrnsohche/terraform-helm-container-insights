@@ -6,7 +6,9 @@
 #   _| |_ / ____ \| |  | |
 #  |_____/_/    \_\_|  |_|
 
-data "aws_iam_policy_document" "eks_container_insights_assume_role_policy" {
+# Cloudwatch Agent
+
+data "aws_iam_policy_document" "eks_container_insights_cwagent_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     effect  = "Allow"
@@ -24,15 +26,47 @@ data "aws_iam_policy_document" "eks_container_insights_assume_role_policy" {
   }
 }
 
-resource "aws_iam_role" "eks_container_insights_role" {
-  assume_role_policy = data.aws_iam_policy_document.eks_container_insights_assume_role_policy.json
-  name               = var.iam_role_name
+resource "aws_iam_role" "eks_container_insights_cwagent_role" {
+  assume_role_policy = data.aws_iam_policy_document.eks_container_insights_cwagent_assume_role_policy.json
+  name               = "${var.iam_role_name}-cwagent"
 
   tags = var.tags
 }
 
-resource "aws_iam_role_policy_attachment" "eks_container_insights_policy_attachment" {
-  role       = aws_iam_role.eks_container_insights_role.name
+resource "aws_iam_role_policy_attachment" "eks_container_insights_cwagent_policy_attachment" {
+  role       = aws_iam_role.eks_container_insights_cwagent_role.name
+  policy_arn = "arn:${data.aws_partition.this.partition}:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
+# Fluentbit
+
+data "aws_iam_policy_document" "eks_container_insights_fluentbit_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(var.eks_oidc_provider_url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:amazon-cloudwatch:fluent-bit"]
+    }
+
+    principals {
+      identifiers = [var.eks_oidc_provider_arn]
+      type        = "Federated"
+    }
+  }
+}
+
+resource "aws_iam_role" "eks_container_insights_fluentbit_role" {
+  assume_role_policy = data.aws_iam_policy_document.eks_container_insights_fluentbit_assume_role_policy.json
+  name               = "${var.iam_role_name}-fluentbit"
+
+  tags = var.tags
+}
+
+resource "aws_iam_role_policy_attachment" "eks_container_insights_fluentbit_policy_attachment" {
+  role       = aws_iam_role.eks_container_insights_fluentbit_role.name
   policy_arn = "arn:${data.aws_partition.this.partition}:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
@@ -44,11 +78,11 @@ resource "aws_iam_role_policy_attachment" "eks_container_insights_policy_attachm
 #  |_|  |_|\___|_|_| |_| |_|
 
 resource "helm_release" "container_insights" {
-  depends_on = [aws_iam_role.eks_container_insights_role]
 
-  name      = "container-insights"
-  chart     = "${path.module}/charts/container-insights"
-  namespace = "amazon-cloudwatch"
+  name             = "container-insights"
+  chart            = "${path.module}/charts/container-insights"
+  namespace        = "amazon-cloudwatch"
+  create_namespace = true
 
   set {
     name  = "region_name"
@@ -81,8 +115,14 @@ resource "helm_release" "container_insights" {
   }
 
   set {
-    name  = "container_insights_iam_role_arn"
-    value = aws_iam_role.eks_container_insights_role.arn
+    name  = "container_insights_cwagent_iam_role_arn"
+    value = aws_iam_role.eks_container_insights_cwagent_role.arn
+  }
+
+
+  set {
+    name  = "container_insights_fluentbit_iam_role_arn"
+    value = aws_iam_role.eks_container_insights_fluentbit_role.arn
   }
 
   set {

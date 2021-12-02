@@ -89,9 +89,10 @@ Here is an example of using this module:
 
 ## Outputs
 
-| Name                                                                    | Description                                                     |
-| ----------------------------------------------------------------------- | --------------------------------------------------------------- |
-| <a name="output_iam_role_arn"></a> [iam_role_arn](#output_iam_role_arn) | The ARN of the IAM role used by the cloudwatch agent container. |
+| Name                                                                                                  | Description                                                     |
+| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| <a name="output_cwagent_iam_role_arn"></a> [cwagent_iam_role_arn](#output_cwagent_iam_role_arn)       | The ARN of the IAM role used by the cloudwatch agent container. |
+| <a name="output_fluentbit_iam_role_arn"></a> [fluentbit_iam_role_arn](#output_fluentbit_iam_role_arn) | The ARN of the IAM role used by the fluentbit container.        |
 
 ## License
 
