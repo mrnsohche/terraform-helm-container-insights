@@ -1,15 +1,11 @@
 # terraform-helm-container-insights
 
-<!-- markdownlint-disable -->
-
 [![Build Status](https://github.com/gooygeek/terraform-helm-container-insights/actions/workflows/terraform.yml/badge.svg)](https://github.com/gooygeek/terraform-helm-container-insights/actions/workflows/terraform.yml)
 [![Release](https://github.com/gooygeek/terraform-helm-container-insights/actions/workflows/release.yml/badge.svg)](https://github.com/gooygeek/terraform-helm-container-insights/actions/workflows/release.yml)
 
-<!-- markdownlint-restore -->
-
 Deploys AWS Container Insights using helm as a terraform module.
 Based on the quickstart (for fluent bit) found here:
-https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Container-Insights-setup-EKS-quickstart.html
+<https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Container-Insights-setup-EKS-quickstart.html>
 
 ## Usage
 
