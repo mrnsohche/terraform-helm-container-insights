@@ -13,7 +13,7 @@ variable "eks_cluster_name" {
 variable "iam_role_name" {
   description = "The name of the IAM role for the cloudwatch agent serviceaccount"
   type        = string
-  default     = "eks-container-insights-role"
+  default     = "eks-container-insights-role-1"
 }
 
 variable "cloudwatch_agent_image" {
