@@ -79,7 +79,7 @@ resource "aws_iam_role_policy_attachment" "eks_container_insights_fluentbit_poli
 
 resource "helm_release" "container_insights" {
 
-  name             = "container-insights"
+  name             = "container-insights-che001"
   chart            = "${path.module}/charts/container-insights"
   namespace        = "amazon-cloudwatch"
   create_namespace = true
